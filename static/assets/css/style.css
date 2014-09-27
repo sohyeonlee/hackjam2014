@@ -1,3 +1,19 @@
-h1 {
-    font-family: garamond;
+* {
+    font-family: arial ;
+}
+
+.row1 {
+    width: 500px;
+}
+
+.row1div {
+    width: 500px; 
+    border: 2px solid #2a7e43;
+    border-radius: 15px;
+    background: #7ebd91;
+}
+
+.query {
+    text-align: center;
+    color: #003f13;
 }
