@@ -2,7 +2,7 @@ from flask import Flask, render_template, session, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from models import User, RegistrationForm
+from models import User, RegistrationForm, SigninForm
 from database import db_session
 
 app = Flask(__name__)
@@ -17,14 +17,18 @@ def index():
 
 # route for handling the login page logic
 @app.route('/login', methods=['GET', 'POST'])
-def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-            error = 'Invalid Credentials. Please try again.'
-        else:
-            return redirect(url_for('register'))
-    return render_template('login.html', error=error)
+def signin():
+  form = SigninForm()
+   
+  if request.method == 'POST':
+    if form.validate() == False:
+      return render_template('index.html', form=form)
+    else:
+      session['email'] = form.email.data
+      return redirect(url_for('index'))
+                 
+  elif request.method == 'GET':
+    return render_template('login.html', form=form)
     
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -34,7 +38,9 @@ def register():
         print("i m here")
         db_session.add(user)
         db_session.commit()
-        return redirect(url_for(''))
-    return render_template('register.html', form=form)        
+        return redirect(url_for('index'))
+    return render_template('register.html', form=form)  
+
+      
 if __name__ == '__main__':
      app.run(debug=True)

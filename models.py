@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
-from wtforms import Form, BooleanField, TextField, PasswordField, validators
+from wtforms import Form, BooleanField, TextField, PasswordField, validators, SubmitField
 from database import Base
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -32,3 +32,22 @@ class RegistrationForm(Form):
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Repeat Password')
+    
+class SigninForm(Form):
+  email = TextField("Email", [validators.Required("Please enter your username."), validators.Email("Please enter your username.")])
+  password = PasswordField('Password', [validators.Required("Please enter a password.")])
+  submit = SubmitField("Sign In")
+   
+  def __init__(self, *args, **kwargs):
+    Form.__init__(self, *args, **kwargs)
+ 
+  def validate(self):
+    if not Form.validate(self):
+      return False
+     
+    user = User.query.filter_by(username = self.username.data).first()
+    if user and user.check_password(self.password.data):
+      return True
+    else:
+      self.email.errors.append("Invalid e-mail or password")
+      return False
