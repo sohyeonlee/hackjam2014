@@ -1,12 +1,12 @@
 from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
-
+from database import Base
 app = Flask(__name__)
 db = SQLAlchemy(app)
  
-class User(db.Model):
+class User(Base):
   __tablename__ = 'users'
   uid = db.Column(db.Integer, primary_key = True)
   username = db.Column(db.String(100))
