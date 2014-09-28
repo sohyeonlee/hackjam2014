@@ -17,3 +17,14 @@
     text-align: center;
     color: #003f13;
 }
+
+.logo {
+	font-family: 'Roboto', sans-serif;
+	font-size: 40px;
+	color: darkgray;
+	padding-top: 20px
+}
+
+h1 {
+	font-family: 'Roboto', sans-serif;
+}
